@@ -4,6 +4,7 @@
  * You are not a stranger here.” 
 				– Alan Watts
 									 */
+/* link: https://codeforces.com/problemset/problem/1669/E */
 #include <algorithm>
 #include <array>
 #include <bitset>

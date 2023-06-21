@@ -72,24 +72,30 @@ typedef vector<pll> vpll;
 #define scs(s) scanf("%s", s)
 #define RET return
 
-const int N = 2e5 + 5;
+const int N = 2e5 + 10;
 char str[N];
-int solve() {
-	int n, ans;
+char tmp[N];
+
+ll solve() {
+	int n;
 	sci(n);
 	scs(str);
-	ans = n-1;
-	int cnt = 1;
-	FOR(i, 1, n) {
-		if(str[i] == str[i-1]) {
-			cnt++;
-		} else {
-			cnt = 1;
-		}
-		if(cnt > 2) ans--;
+	int k = 0;
+	ll ans = n-1;
+	FOR(i, 2, n) tmp[k++] = str[i];
+	tmp[k] = 0;
+	int l = 0, r = 3;
+	while(r <= n) {
+		if(str[l] == tmp[l] && str[r] == tmp[l+1]) ans--;
+		tmp[l] = str[l], tmp[l+1] = str[r];
+		l++, r++;
 	}
 	RET ans;
 }
+
+
+
+
 int main(void) {
 	/* freopen("input.txt", "r", stdin); */
 	/* freopen("output.txt", "w", stdout); */

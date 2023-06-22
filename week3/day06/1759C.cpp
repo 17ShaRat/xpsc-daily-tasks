@@ -1,6 +1,6 @@
 /* 
  * You didn’t come into this world. 
- * You came out of it, like a wave from the ocean. Y
+ * You came out of it, like a wave from the ocean.
  * You are not a stranger here.” 
 				– Alan Watts
 									 */
@@ -70,23 +70,22 @@ typedef vector<pll> vpll;
 #define prl(x) printf("%lld ", x)
 #define prln(x) printf("%lld\n", x)
 #define scs(s) scanf("%s", s)
+#define scs2(s1, s2) scanf("%s %s", s1, s2)
 #define RET return
 
 ll solve() {
+	int op = 0;
 	int l, r, x, a, b;
 	sci3(l, r, x);
 	sci2(a, b);
-	int op = 0;
-	if(b > r || b < l) RET -1;
-	if(abs(a-b) == 0) RET 0;
-	if(x == 0) RET -1;
-	if(abs(a-b) >= x) RET 1;
+	if(a == b) RET 0;
+	if(abs(l-a) < x && abs(r-a) < x) RET -1;
 	if(abs(l-b) < x && abs(r-b) < x) RET -1;
-	if(abs(a-l) >= x) a = l; else a = r;
-	if(abs(a-b) >= x) RET 2;
+	if(abs(a-b) >= x) RET 1;
+	if(abs(b-l) >= x && abs(a-l) >= x) RET 2;
+	if(abs(b-r) >= x && abs(a-r) >= x) RET 2;
 	RET 3;
 }
-
 int main(void) {
 	/* freopen("input.txt", "r", stdin); */
 	/* freopen("output.txt", "w", stdout); */
@@ -104,7 +103,8 @@ int main(void) {
 			/* } else { */
 			/* 		printf("NO\n"); */
 			/* } */
-		} 
+		}
+	 
 	RET 0;
 }
 

@@ -41,11 +41,8 @@ using pll = pair<ll, ll>;
 typedef vector<int> vi;
 typedef vector<ld> vd;
 typedef vector<ll> vl;
-typedef vector<pii> vpii;
-typedef vector<pil> vpil;
-typedef vector<pli> vpli;
+typedef vector<pil> vpii;
 typedef vector<pll> vpll;
-typedef vector<bool> vb;
 #define pb push_back
 #define mp make_pair
 #define all(x) (x).begin(), (x).end()
@@ -60,7 +57,6 @@ typedef vector<bool> vb;
 #define F0Rd(i,a) for (int i = (a)-1; i >= 0; i--)
 #define trav(a,x) for (auto& a : x)
 #define nl putchar('\n')
-#define putc(c) putchar(c)
 #define ins insert
 #define sci(x) scanf("%d", &x)
 #define sci2(a,b) scanf("%d %d", &a, &b)
@@ -74,29 +70,27 @@ typedef vector<bool> vb;
 #define prl(x) printf("%lld ", x)
 #define prln(x) printf("%lld\n", x)
 #define scs(s) scanf("%s", s)
-#define scs2(s1, s2) scanf("%s %s", s1, s2)
 #define RET return
 
 const int N = 2e5 + 5;
-int arr[N];
 void solve() {
-	ll sum = 0, ans = 0;
-	int n;
-	sci(n);
-	int prev = 1;
-	bool First = true;
+	int n; sci(n);
+	ll sum = 0;
+	int op = 0;
+	int prev = 9;
 	F0R(i, n) {
 		int x;
 		sci(x);
 		sum += abs(x);
-		if((x < 0 || First)&& prev > 0) {
-			ans++;
-			First = false;
+		if(x < 0 && prev > 0) {
+			op++;
 		}
-		prev = x;
+		if(x != 0) prev = x;
 	}
-	printf("%lld %lld\n", sum, ans);
+	printf("%lld %d\n", sum, op);
 }
+
+
 int main(void) {
 	/* freopen("input.txt", "r", stdin); */
 	/* freopen("output.txt", "w", stdout); */
@@ -114,8 +108,7 @@ int main(void) {
 			/* } else { */
 			/* 		printf("NO\n"); */
 			/* } */
-		}
-	 
+		} 
 	RET 0;
 }
 

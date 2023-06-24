@@ -27,6 +27,7 @@
 #include <queue>
 #include <string>
 #include <random>
+#include <iostream>
 using namespace std;
 using ll = long long;
 using ld = long double;
@@ -77,15 +78,36 @@ typedef vector<pll> vpll;
 #define scs2(s1, s2) scanf("%s %s", s1, s2)
 #define RET return
 
-
+const int N = 50;
+char str[N];
+void solve() {
+	string s;
+	int n;
+	sci(n);
+	unordered_map<string, bool> MP;
+	stack<string> st;
+	F0R(i, n) {
+		cin >> s;
+		st.push(s);
+	}
+	while(sz(st)) {
+		string now = st.top();
+		if(!MP[now]) {
+			printf("%c%c", now[now.size()-2], now[now.size()-1]);
+			MP[now] = 1;
+		}
+		st.pop();
+	}
+	nl;
+}
 
 
 int main(void) {
 	/* freopen("input.txt", "r", stdin); */
 	/* freopen("output.txt", "w", stdout); */
 
-	printf("%d\n", (int) log2(25));
-	 
+	int t = 1;
+	while(t--) solve();
 	RET 0;
 }
 

@@ -4,7 +4,7 @@
  * You are not a stranger here.” 
 				– Alan Watts
 									 */
-/* link: https://www.codechef.com/problems/BOX95 */
+/* link: https://www.codechef.com/problems/CS2023_PON */
 #include <algorithm>
 #include <array>
 #include <bitset>
@@ -42,9 +42,7 @@ using pll = pair<ll, ll>;
 typedef vector<int> vi;
 typedef vector<ld> vd;
 typedef vector<ll> vl;
-typedef vector<pii> vpii;
-typedef vector<pil> vpil;
-typedef vector<pli> vpli;
+typedef vector<pil> vpii;
 typedef vector<pll> vpll;
 #define pb push_back
 #define mp make_pair
@@ -60,7 +58,6 @@ typedef vector<pll> vpll;
 #define F0Rd(i,a) for (int i = (a)-1; i >= 0; i--)
 #define trav(a,x) for (auto& a : x)
 #define nl putchar('\n')
-#define putc(c) putchar(c)
 #define ins insert
 #define sci(x) scanf("%d", &x)
 #define sci2(a,b) scanf("%d %d", &a, &b)
@@ -77,32 +74,26 @@ typedef vector<pll> vpll;
 #define scs2(s1, s2) scanf("%s %s", s1, s2)
 #define RET return
 
-const int N = 2e5 + 5;
-ll arr[N];
-int deg2(ll n) {
+bool solve() {
+	int n, b;
+	sci2(n, b);
 	int cnt = 0;
-	while(n > 1) {
-		cnt++;
-		n /= 2;
-	}
-	RET cnt;
-}
-ll solve() {
-	ll ans = 0;
-	int cnt = 0;
-	ll mx = 0;
-	int n;
-	sci(n);
+	vi tmp;
 	F0R(i, n) {
-		scl(arr[i]);
-		mx = max(arr[i], mx);
+		int x;
+		sci(x);
+		if((x & b) == b) {
+			tmp.pb(x);
+		}
 	}
-	ll num = 1L << deg2(mx);
-	F0R(i, n) {
-		if((arr[i] & num) == num) cnt++;
+	if(!sz(tmp)) RET 0;
+	int ans = tmp[0];
+	F0R(i, sz(tmp)) {
+		ans = ans & tmp[i];
 	}
-	RET ceil(cnt/2.0);
+	RET ans == b;
 }
+
 
 int main(void) {
 	/* freopen("input.txt", "r", stdin); */
@@ -114,15 +105,14 @@ int main(void) {
 	
 			/* solve(); */
 			
-			printf("%lld\n", (ll) solve());
+			/* printf("%lld\n", (ll) solve()); */
 	
-			/* if (solve()) { */
-			/* 	printf("YES\n"); */
-			/* } else { */
-			/* 		printf("NO\n"); */
-			/* } */
+			if (solve()) {
+				printf("YES\n");
+			} else {
+					printf("NO\n");
+			}
 		}
-
 	 
 	RET 0;
 }

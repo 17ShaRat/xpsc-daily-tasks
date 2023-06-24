@@ -4,6 +4,7 @@
  * You are not a stranger here.” 
 				– Alan Watts
 									 */
+/* link: https://www.codechef.com/problems/MOONSOON */
 #include <algorithm>
 #include <array>
 #include <bitset>

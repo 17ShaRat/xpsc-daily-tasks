@@ -4,7 +4,7 @@
  * You are not a stranger here.” 
 				– Alan Watts
 									 */
-/* link: https://www.codechef.com/problems/BOX95 */
+/* link: https://www.codechef.com/problems/PALIXOR */
 #include <algorithm>
 #include <array>
 #include <bitset>
@@ -77,31 +77,41 @@ typedef vector<pll> vpll;
 #define scs2(s1, s2) scanf("%s %s", s1, s2)
 #define RET return
 
-const int N = 2e5 + 5;
-ll arr[N];
-int deg2(ll n) {
-	int cnt = 0;
-	while(n > 1) {
-		cnt++;
-		n /= 2;
+const int N = 1e5 + 5;
+const int M = (1 << 15) + 5;
+bool is_pali(int n) {
+	int tmp = n;
+	int rev = 0;
+	while(tmp) {
+		rev *= 10;
+		rev += (tmp % 10);
+		tmp /= 10;
 	}
-	RET cnt;
+	RET n == rev;
 }
+vi pali;
+void gen_pali() {
+	F0R(k, M) {
+		if(is_pali(k)) {
+			pali.pb(k);
+		}
+	}
+}
+
 ll solve() {
-	ll ans = 0;
-	int cnt = 0;
-	ll mx = 0;
-	int n;
-	sci(n);
+	ll ans = 0, n;
+	scl(n);
+	vi num(M, 0);
 	F0R(i, n) {
-		scl(arr[i]);
-		mx = max(arr[i], mx);
+		int x;
+		sci(x);
+		num[x]++;
+		trav(a, pali) {
+			int jor = x ^ a;
+			ans += num[jor];
+		}
 	}
-	ll num = 1L << deg2(mx);
-	F0R(i, n) {
-		if((arr[i] & num) == num) cnt++;
-	}
-	RET ceil(cnt/2.0);
+	RET ans;
 }
 
 int main(void) {
@@ -109,6 +119,7 @@ int main(void) {
 	/* freopen("output.txt", "w", stdout); */
 		int t;
 		scanf("%d", &t);
+		gen_pali();
 		for (int i = 1; i <= t; i++) {
 			/* printf("Case %d: ", i); */
 	
@@ -122,7 +133,6 @@ int main(void) {
 			/* 		printf("NO\n"); */
 			/* } */
 		}
-
 	 
 	RET 0;
 }

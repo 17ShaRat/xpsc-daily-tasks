@@ -41,7 +41,7 @@ using pll = pair<ll, ll>;
 typedef vector<int> vi;
 typedef vector<ld> vd;
 typedef vector<ll> vl;
-typedef vector<pil> vpii;
+typedef vector<pii> vpii;
 typedef vector<pll> vpll;
 #define pb push_back
 #define mp make_pair
@@ -57,6 +57,7 @@ typedef vector<pll> vpll;
 #define F0Rd(i,a) for (int i = (a)-1; i >= 0; i--)
 #define trav(a,x) for (auto& a : x)
 #define nl putchar('\n')
+#define putc(c) putchar(c)
 #define ins insert
 #define sci(x) scanf("%d", &x)
 #define sci2(a,b) scanf("%d %d", &a, &b)
@@ -70,83 +71,58 @@ typedef vector<pll> vpll;
 #define prl(x) printf("%lld ", x)
 #define prln(x) printf("%lld\n", x)
 #define scs(s) scanf("%s", s)
+#define scs2(s1, s2) scanf("%s %s", s1, s2)
 #define RET return
+
+const int N = 200;
+int num[N];
+vi g[N];
+vi level;
+void add(int par, int l, int r) {
+	if(l > r) RET;
+	int mi, mx = -1;
+	for(int i = l; i <= r; i++) {
+		if(num[i] > mx) {
+			mx = num[i];
+			mi = i;
+		}
+	}
+	g[par].pb(mx);
+	add(mx, l, mi-1);
+	add(mx, mi+1, r);
+}
+void dfs(int src) {
+	trav(v, g[src]) {
+			level[v] = level[src]+1;
+			dfs(v);
+	}
+}
 
 void solve() {
 	int n;
 	sci(n);
-	vi nums(n);
-	vi occur(n+1, 0);
-	bool before = false, after = false;
-	bool found = false;
-	F0R(i, n-1) {
-		sci(nums[i]);
-		occur[nums[i]] = true;
-	}
-	int missing;
-	FOR(i,1, n+1) {
-		if(!occur[i]) {
-			missing = i;
-			break;
+	level.clear();
+	level.resize(n+1, -1);
+	int mi, root = -1;
+	F0R(i, n) {
+		g[i].clear();
+		sci(num[i]);
+		if(num[i] > root) {
+			mi = i;
+			root = num[i];
 		}
 	}
-	int idx = -1;
-	vi tmp(n);
-	F0R(i, n-1) {
-		sci(tmp[i]);
-		if(idx == -1 && tmp[i] == missing) {
-			idx = i;
-		}
-	}
-	int look = nums[idx];
-	F0R(j, n-1) {
-		if(!found && tmp[j] == missing) {
-			if(j > 0 && tmp[j-1] == look) {
-				found = true;
-				after = true;
-				break;
-			} else if(j < n-2 && tmp[j+1] == look) {
-				found = true;
-				before = true;
-				break;
-			}
-		}
-	}
-	F0R(i, n-2) {
-		F0R(j, n-1) {
-			sci(tmp[j]);
-		}
-		F0R(j, n-1) {
-			if(!found && tmp[j] == missing) {
-				if(j > 0 && tmp[j-1] == look) {
-					found = true;
-					after = true;
-					break;
-				} else if(j < n-2 && tmp[j+1] == look) {
-					found = true;
-					before = true;
-					break;
-				}
-			}
-		}
-	}
-	if(before) {
-		F0R(i, n-1) {
-			if(nums[i] == look) {
-				printf("%d ", missing);
-			}
-			pri(nums[i]);
-		}
-	} else {
-		F0R(i, n-1) {
-			pri(nums[i]);
-			if(nums[i] == look) {
-				printf("%d ", missing);
-			}
-		}
+	add(root, 0, mi-1);
+	add(root, mi+1, n-1);
+	level[root] = 0;
+	dfs(root);
+	F0R(i, n) {
+		printf("%d ",
+				level[num[i]]);
 	}
 	nl;
 }
+
 
 int main(void) {
 	/* freopen("input.txt", "r", stdin); */
@@ -165,7 +141,8 @@ int main(void) {
 			/* } else { */
 			/* 		printf("NO\n"); */
 			/* } */
-		} 
+		}
+	 
 	RET 0;
 }
 

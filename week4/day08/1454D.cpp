@@ -1,7 +1,7 @@
 /* 
  * You didn’t come into this world. 
  * You came out of it, like a wave from the ocean.
- * You are not a stranger here.” 
+ * You are not a stranger here. 
 				– Alan Watts
 									 */
 #include <algorithm>
@@ -41,8 +41,9 @@ using pll = pair<ll, ll>;
 typedef vector<int> vi;
 typedef vector<ld> vd;
 typedef vector<ll> vl;
-typedef vector<pil> vpii;
+typedef vector<pii> vpii;
 typedef vector<pll> vpll;
+typedef vector<bool> vb;
 #define pb push_back
 #define mp make_pair
 #define all(x) (x).begin(), (x).end()
@@ -57,6 +58,7 @@ typedef vector<pll> vpll;
 #define F0Rd(i,a) for (int i = (a)-1; i >= 0; i--)
 #define trav(a,x) for (auto& a : x)
 #define nl putchar('\n')
+#define putc(c) putchar(c)
 #define ins insert
 #define sci(x) scanf("%d", &x)
 #define sci2(a,b) scanf("%d %d", &a, &b)
@@ -70,89 +72,69 @@ typedef vector<pll> vpll;
 #define prl(x) printf("%lld ", x)
 #define prln(x) printf("%lld\n", x)
 #define scs(s) scanf("%s", s)
+#define scs2(s1, s2) scanf("%s %s", s1, s2)
 #define RET return
-
-void solve() {
-	int n;
-	sci(n);
-	vi nums(n);
-	vi occur(n+1, 0);
-	bool before = false, after = false;
-	bool found = false;
-	F0R(i, n-1) {
-		sci(nums[i]);
-		occur[nums[i]] = true;
-	}
-	int missing;
-	FOR(i,1, n+1) {
-		if(!occur[i]) {
-			missing = i;
-			break;
+const int N = 1e5 + 100;
+vb num(N, 1);
+vl primes;
+void gen_prime() {
+	num[2] = 1;
+	num[0] = num[1] = 0;
+	FOR(i, 2, N) {
+		if(num[i]) {
+			primes.pb(i);
+			for(int j = 2; j*i < N; j++) 
+				num[j*i] = 0;
 		}
 	}
-	int idx = -1;
-	vi tmp(n);
-	F0R(i, n-1) {
-		sci(tmp[i]);
-		if(idx == -1 && tmp[i] == missing) {
-			idx = i;
-		}
-	}
-	int look = nums[idx];
-	F0R(j, n-1) {
-		if(!found && tmp[j] == missing) {
-			if(j > 0 && tmp[j-1] == look) {
-				found = true;
-				after = true;
-				break;
-			} else if(j < n-2 && tmp[j+1] == look) {
-				found = true;
-				before = true;
-				break;
-			}
-		}
-	}
-	F0R(i, n-2) {
-		F0R(j, n-1) {
-			sci(tmp[j]);
-		}
-		F0R(j, n-1) {
-			if(!found && tmp[j] == missing) {
-				if(j > 0 && tmp[j-1] == look) {
-					found = true;
-					after = true;
-					break;
-				} else if(j < n-2 && tmp[j+1] == look) {
-					found = true;
-					before = true;
-					break;
-				}
-			}
-		}
-	}
-	if(before) {
-		F0R(i, n-1) {
-			if(nums[i] == look) {
-				printf("%d ", missing);
-			}
-			pri(nums[i]);
-		}
-	} else {
-		F0R(i, n-1) {
-			pri(nums[i]);
-			if(nums[i] == look) {
-				printf("%d ", missing);
-			}
-		}
-	}
-	nl;
 }
-
+void solve() {
+	ll n;
+	scl(n);
+	bool found = 0;
+	int cnt = 0;
+	ll div = 1;
+	vpii divs;
+	ll tmp = n;
+	trav(prime, primes) {
+		cnt = 0;
+		n = tmp;
+		if(prime == n) {
+			printf("1\n%lld\n", prime);
+			RET;
+		}
+		while(n % prime == 0) {
+			cnt++;
+			n /= prime;
+			found = 1;
+		}
+		if(cnt) {
+			divs.pb({cnt, prime});
+		}
+	}
+	if(!found) {
+		printf("1\n");
+		printf("%lld\n", n);
+		RET;
+	}
+	sort(all(divs));
+	cnt = divs.back().fi;
+	div = divs.back().se;
+	printf("%d\n", cnt);
+	cnt--;
+	ll done = 1;
+	F0R(i, cnt) {
+		printf("%lld ", div);
+		done *= div;
+	}
+	printf("%lld\n", tmp/done);
+}
 int main(void) {
 	/* freopen("input.txt", "r", stdin); */
 	/* freopen("output.txt", "w", stdout); */
 		int t;
 		scanf("%d", &t);
+		gen_prime();
 		for (int i = 1; i <= t; i++) {
 			/* printf("Case %d: ", i); */
 	
@@ -165,7 +147,8 @@ int main(void) {
 			/* } else { */
 			/* 		printf("NO\n"); */
 			/* } */
-		} 
+		}
+	 
 	RET 0;
 }
 

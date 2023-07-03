@@ -1,7 +1,7 @@
 /* 
  * You didn’t come into this world. 
  * You came out of it, like a wave from the ocean.
- * You are not a stranger here.” 
+ * You are not a stranger here. 
 				– Alan Watts
 									 */
 #include <algorithm>
@@ -41,8 +41,9 @@ using pll = pair<ll, ll>;
 typedef vector<int> vi;
 typedef vector<ld> vd;
 typedef vector<ll> vl;
-typedef vector<pil> vpii;
+typedef vector<pii> vpii;
 typedef vector<pll> vpll;
+typedef vector<bool> vb;
 #define pb push_back
 #define mp make_pair
 #define all(x) (x).begin(), (x).end()
@@ -57,6 +58,7 @@ typedef vector<pll> vpll;
 #define F0Rd(i,a) for (int i = (a)-1; i >= 0; i--)
 #define trav(a,x) for (auto& a : x)
 #define nl putchar('\n')
+#define putc(c) putchar(c)
 #define ins insert
 #define sci(x) scanf("%d", &x)
 #define sci2(a,b) scanf("%d %d", &a, &b)
@@ -70,79 +72,47 @@ typedef vector<pll> vpll;
 #define prl(x) printf("%lld ", x)
 #define prln(x) printf("%lld\n", x)
 #define scs(s) scanf("%s", s)
+#define scs2(s1, s2) scanf("%s %s", s1, s2)
 #define RET return
 
 void solve() {
 	int n;
 	sci(n);
-	vi nums(n);
-	vi occur(n+1, 0);
-	bool before = false, after = false;
-	bool found = false;
-	F0R(i, n-1) {
-		sci(nums[i]);
-		occur[nums[i]] = true;
+	ll total = 0;
+	vi v(n+2);
+	unordered_map<int, int> MP;
+	F0R(i, n+2) {
+		sci(v[i]);
+		MP[v[i]]++;
+		total += v[i];
 	}
-	int missing;
-	FOR(i,1, n+1) {
-		if(!occur[i]) {
-			missing = i;
-			break;
-		}
+	sort(all(v));
+	bool found = 0;
+	int tmp = total - 2*v[n+1];
+	int xtra;
+	MP[v[n+1]]--;
+	if(MP[tmp]) {
+		found = 1;
+		xtra = tmp;
 	}
-	int idx = -1;
-	vi tmp(n);
-	F0R(i, n-1) {
-		sci(tmp[i]);
-		if(idx == -1 && tmp[i] == missing) {
-			idx = i;
-		}
+	MP[v[n+1]]++;
+	tmp = total - 2*v[n];
+	MP[v[n]]--;
+	if(!found && MP[tmp]) {
+		found = 1;
+		xtra = tmp;
+		swap(v[n], v[n+1]);
 	}
-	int look = nums[idx];
-	F0R(j, n-1) {
-		if(!found && tmp[j] == missing) {
-			if(j > 0 && tmp[j-1] == look) {
-				found = true;
-				after = true;
-				break;
-			} else if(j < n-2 && tmp[j+1] == look) {
-				found = true;
-				before = true;
-				break;
-			}
-		}
+	if(!found) {
+		puts("-1");
+		RET;
 	}
-	F0R(i, n-2) {
-		F0R(j, n-1) {
-			sci(tmp[j]);
-		}
-		F0R(j, n-1) {
-			if(!found && tmp[j] == missing) {
-				if(j > 0 && tmp[j-1] == look) {
-					found = true;
-					after = true;
-					break;
-				} else if(j < n-2 && tmp[j+1] == look) {
-					found = true;
-					before = true;
-					break;
-				}
-			}
-		}
-	}
-	if(before) {
-		F0R(i, n-1) {
-			if(nums[i] == look) {
-				printf("%d ", missing);
-			}
-			pri(nums[i]);
-		}
-	} else {
-		F0R(i, n-1) {
-			pri(nums[i]);
-			if(nums[i] == look) {
-				printf("%d ", missing);
-			}
+	found = 0;
+	F0R(i, n+1) {
+		if(!found && v[i] == xtra) {
+			found = 1;
+		} else {
+			pri(v[i]);
 		}
 	}
 	nl;
@@ -165,7 +135,8 @@ int main(void) {
 			/* } else { */
 			/* 		printf("NO\n"); */
 			/* } */
-		} 
+		}
+	 
 	RET 0;
 }
 

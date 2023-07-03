@@ -1,7 +1,7 @@
 /* 
  * You didn’t come into this world. 
  * You came out of it, like a wave from the ocean.
- * You are not a stranger here.” 
+ * You are not a stranger here. 
 				– Alan Watts
 									 */
 #include <algorithm>
@@ -16,6 +16,7 @@
 #include <chrono>
 #include <ctime>
 #include <cassert>
+#include <functional>
 #include <list>
 #include <vector>
 #include <set>
@@ -41,8 +42,9 @@ using pll = pair<ll, ll>;
 typedef vector<int> vi;
 typedef vector<ld> vd;
 typedef vector<ll> vl;
-typedef vector<pil> vpii;
+typedef vector<pii> vpii;
 typedef vector<pll> vpll;
+typedef vector<bool> vb;
 #define pb push_back
 #define mp make_pair
 #define all(x) (x).begin(), (x).end()
@@ -57,6 +59,7 @@ typedef vector<pll> vpll;
 #define F0Rd(i,a) for (int i = (a)-1; i >= 0; i--)
 #define trav(a,x) for (auto& a : x)
 #define nl putchar('\n')
+#define putc(c) putchar(c)
 #define ins insert
 #define sci(x) scanf("%d", &x)
 #define sci2(a,b) scanf("%d %d", &a, &b)
@@ -70,83 +73,63 @@ typedef vector<pll> vpll;
 #define prl(x) printf("%lld ", x)
 #define prln(x) printf("%lld\n", x)
 #define scs(s) scanf("%s", s)
+#define scs2(s1, s2) scanf("%s %s", s1, s2)
 #define RET return
 
 void solve() {
 	int n;
 	sci(n);
-	vi nums(n);
-	vi occur(n+1, 0);
-	bool before = false, after = false;
-	bool found = false;
-	F0R(i, n-1) {
-		sci(nums[i]);
-		occur[nums[i]] = true;
+	vi evens, odds;
+	F0R(i, n) {
+		int x; sci(x);
+		if(x&1) odds.pb(x);
+		else evens.pb(x);
 	}
-	int missing;
-	FOR(i,1, n+1) {
-		if(!occur[i]) {
-			missing = i;
-			break;
-		}
-	}
-	int idx = -1;
-	vi tmp(n);
-	F0R(i, n-1) {
-		sci(tmp[i]);
-		if(idx == -1 && tmp[i] == missing) {
-			idx = i;
-		}
-	}
-	int look = nums[idx];
-	F0R(j, n-1) {
-		if(!found && tmp[j] == missing) {
-			if(j > 0 && tmp[j-1] == look) {
-				found = true;
-				after = true;
-				break;
-			} else if(j < n-2 && tmp[j+1] == look) {
-				found = true;
-				before = true;
-				break;
+	sort(all(evens));
+	sort(all(odds));
+	reverse(evens.rbegin(), evens.rend());
+	reverse(odds.rbegin(), odds.rend());
+	ll esum = 0, osum = 0;
+	int i = 0, j = 0;
+	bool alice = 1, bob = 0;
+	while(i < sz(evens) && j < sz(odds)) {
+		if(alice) {
+			if(evens[i] == odds[j]) {
+				i++, j++;
+			} else if(evens[i] > odds[j]) {
+				esum += evens[i];
+				i++;
+			} else {
+				j++;
 			}
 		}
-	}
-	F0R(i, n-2) {
-		F0R(j, n-1) {
-			sci(tmp[j]);
-		}
-		F0R(j, n-1) {
-			if(!found && tmp[j] == missing) {
-				if(j > 0 && tmp[j-1] == look) {
-					found = true;
-					after = true;
-					break;
-				} else if(j < n-2 && tmp[j+1] == look) {
-					found = true;
-					before = true;
-					break;
-				}
+		if(bob) {
+			if(evens[i] == odds[j]) {
+				i++, j++;
+			} else if(evens[i] > odds[j]) {
+				i++;
+			} else {
+				osum += odds[j];
+				j++;
 			}
 		}
+			swap(alice, bob);
 	}
-	if(before) {
-		F0R(i, n-1) {
-			if(nums[i] == look) {
-				printf("%d ", missing);
-			}
-			pri(nums[i]);
-		}
-	} else {
-		F0R(i, n-1) {
-			pri(nums[i]);
-			if(nums[i] == look) {
-				printf("%d ", missing);
-			}
-		}
+	while(i < sz(evens)) {
+		if(alice) esum += evens[i];
+		i++;
+		swap(alice, bob);
 	}
-	nl;
+	while(j < sz(odds)) {
+		if(bob) osum += odds[j];
+		j++;
+		swap(alice, bob);
+	}
+	if(esum == osum) puts("Tie");
+	else if(esum > osum) puts("Alice");
+	else puts("Bob");
 }
+
 
 int main(void) {
 	/* freopen("input.txt", "r", stdin); */
@@ -165,7 +148,8 @@ int main(void) {
 			/* } else { */
 			/* 		printf("NO\n"); */
 			/* } */
-		} 
+		}
+	 
 	RET 0;
 }
 

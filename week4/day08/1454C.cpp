@@ -1,7 +1,7 @@
 /* 
  * You didn’t come into this world. 
  * You came out of it, like a wave from the ocean.
- * You are not a stranger here.” 
+ * You are not a stranger here. 
 				– Alan Watts
 									 */
 #include <algorithm>
@@ -41,8 +41,9 @@ using pll = pair<ll, ll>;
 typedef vector<int> vi;
 typedef vector<ld> vd;
 typedef vector<ll> vl;
-typedef vector<pil> vpii;
+typedef vector<pii> vpii;
 typedef vector<pll> vpll;
+typedef vector<bool> vb;
 #define pb push_back
 #define mp make_pair
 #define all(x) (x).begin(), (x).end()
@@ -57,6 +58,7 @@ typedef vector<pll> vpll;
 #define F0Rd(i,a) for (int i = (a)-1; i >= 0; i--)
 #define trav(a,x) for (auto& a : x)
 #define nl putchar('\n')
+#define putc(c) putchar(c)
 #define ins insert
 #define sci(x) scanf("%d", &x)
 #define sci2(a,b) scanf("%d %d", &a, &b)
@@ -70,84 +72,40 @@ typedef vector<pll> vpll;
 #define prl(x) printf("%lld ", x)
 #define prln(x) printf("%lld\n", x)
 #define scs(s) scanf("%s", s)
+#define scs2(s1, s2) scanf("%s %s", s1, s2)
 #define RET return
 
-void solve() {
-	int n;
-	sci(n);
-	vi nums(n);
+int solve() {
+	int n; sci(n);
 	vi occur(n+1, 0);
-	bool before = false, after = false;
-	bool found = false;
-	F0R(i, n-1) {
-		sci(nums[i]);
-		occur[nums[i]] = true;
+	vi v(n);
+	sci(v[0]);
+	occur[v[0]]++;
+	bool zero = true;
+	FOR(i, 1, n) {
+		sci(v[i]);
+		if(v[i] != v[i-1]) zero = 0;
+		if(v[i] != v[i-1]) occur[v[i]]++;
 	}
-	int missing;
-	FOR(i,1, n+1) {
-		if(!occur[i]) {
-			missing = i;
-			break;
-		}
-	}
-	int idx = -1;
-	vi tmp(n);
-	F0R(i, n-1) {
-		sci(tmp[i]);
-		if(idx == -1 && tmp[i] == missing) {
-			idx = i;
+	if(zero) RET 0;
+	priority_queue<int> pq;
+	F0R(i, n+1) {
+		if(occur[i]) {
+			pq.push(-occur[i]);
 		}
 	}
-	int look = nums[idx];
-	F0R(j, n-1) {
-		if(!found && tmp[j] == missing) {
-			if(j > 0 && tmp[j-1] == look) {
-				found = true;
-				after = true;
-				break;
-			} else if(j < n-2 && tmp[j+1] == look) {
-				found = true;
-				before = true;
-				break;
-			}
-		}
-	}
-	F0R(i, n-2) {
-		F0R(j, n-1) {
-			sci(tmp[j]);
-		}
-		F0R(j, n-1) {
-			if(!found && tmp[j] == missing) {
-				if(j > 0 && tmp[j-1] == look) {
-					found = true;
-					after = true;
-					break;
-				} else if(j < n-2 && tmp[j+1] == look) {
-					found = true;
-					before = true;
-					break;
-				}
-			}
-		}
-	}
-	if(before) {
-		F0R(i, n-1) {
-			if(nums[i] == look) {
-				printf("%d ", missing);
-			}
-			pri(nums[i]);
-		}
+	if(v[0] == v[n-1]) {
+		occur[v[0]]  -= 2;
 	} else {
-		F0R(i, n-1) {
-			pri(nums[i]);
-			if(nums[i] == look) {
-				printf("%d ", missing);
-			}
-		}
+		occur[v[0]]--;
+		occur[v[n-1]]--;
 	}
-	nl;
-}
 
+	pq.push(-occur[v[n-1]]);
+	pq.push(-occur[v[0]]);
+	if(pq.top() == 0) RET 1;
+	RET (-pq.top() + 1);
+}
 int main(void) {
 	/* freopen("input.txt", "r", stdin); */
 	/* freopen("output.txt", "w", stdout); */
@@ -156,16 +114,17 @@ int main(void) {
 		for (int i = 1; i <= t; i++) {
 			/* printf("Case %d: ", i); */
 	
-			solve();
+			/* solve(); */
 			
-			/* printf("%lld\n", (ll) solve()); */
+			printf("%lld\n", (ll) solve());
 	
 			/* if (solve()) { */
 			/* 	printf("YES\n"); */
 			/* } else { */
 			/* 		printf("NO\n"); */
 			/* } */
-		} 
+		}
+	 
 	RET 0;
 }
 

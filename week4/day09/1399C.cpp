@@ -74,48 +74,32 @@ typedef vector<bool> vb;
 #define scs(s) scanf("%s", s)
 #define scs2(s1, s2) scanf("%s %s", s1, s2)
 #define RET return
-
-void solve() {
+#define MAXW 1000
+#define N 101
+int solve() {
 	int n;
 	sci(n);
-	ll total = 0;
-	vi v(n+2);
-	map<ll, int> MP;
-	F0R(i, n+2) {
-		sci(v[i]);
-		MP[v[i]]++;
-		total += v[i];
+	vi w(MAXW, 0);
+	F0R(i, n) {
+		int x; sci(x);
+		w[x]++;
 	}
-	sort(all(v));
-	bool found = 0;
-	ll tmp = total - 2*v[n+1];
-	ll xtra;
-	MP[v[n+1]]--;
-	if(MP[tmp]) {
-		found = 1;
-		xtra = tmp;
-	}
-	MP[v[n+1]]++;
-	tmp = total - 2*v[n];
-	MP[v[n]]--;
-	if(!found && MP[tmp]) {
-		found = 1;
-		xtra = tmp;
-		swap(v[n], v[n+1]);
-	}
-	if(!found) {
-		puts("-1");
-		RET;
-	}
-	found = 0;
-	F0R(i, n+1) {
-		if(!found && v[i] == xtra) {
-			found = 1;
-		} else {
-			pri(v[i]);
+	int best = 0;
+	FOR(T, 2, N) {
+		vi tmp = w;
+		int cnt = 0;
+		FOR(i, 1, T) {
+			if(i*2 == T) {
+				cnt += tmp[i]/2;
+			} else {
+				int mn = min(tmp[i], tmp[T-i]);
+				cnt += mn;
+				tmp[i] -= mn, tmp[T-i] -= mn;
+			}
 		}
+		best = max(best, cnt);
 	}
-	nl;
+	RET best;
 }
 
 int main(void) {
@@ -126,9 +110,9 @@ int main(void) {
 		for (int i = 1; i <= t; i++) {
 			/* printf("Case %d: ", i); */
 	
-			solve();
+			/* solve(); */
 			
-			/* printf("%lld\n", (ll) solve()); */
+			printf("%lld\n", (ll) solve());
 	
 			/* if (solve()) { */
 			/* 	printf("YES\n"); */

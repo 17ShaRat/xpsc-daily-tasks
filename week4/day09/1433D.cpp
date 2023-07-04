@@ -78,46 +78,56 @@ typedef vector<bool> vb;
 void solve() {
 	int n;
 	sci(n);
-	ll total = 0;
-	vi v(n+2);
-	map<ll, int> MP;
-	F0R(i, n+2) {
-		sci(v[i]);
-		MP[v[i]]++;
-		total += v[i];
+	vpii a;
+	vector<vector<int>> v;
+	F0R(i, n) {
+		int gang;
+		sci(gang);
+		a.pb({gang, i+1});
 	}
-	sort(all(v));
-	bool found = 0;
-	ll tmp = total - 2*v[n+1];
-	ll xtra;
-	MP[v[n+1]]--;
-	if(MP[tmp]) {
-		found = 1;
-		xtra = tmp;
+	sort(all(a));
+	int mn = INT32_MAX, mx = -1;
+	int mni, mxi;
+	F0R(i, n) {
+		int c = 1;
+		vi tmp;
+		int j = i;
+		int nb = 0;
+		while(j < n && a[j].fi == a[i].fi) {
+			tmp.pb(a[j].se);
+			j++;
+			nb++;
+		}
+		if(nb >= mx) {
+			mx = nb;
+			mxi = v.size();
+		}
+		if(nb < mn) {
+			mn = nb;
+			mni = v.size();
+		}
+		v.pb(tmp);
+		i = j - 1;
 	}
-	MP[v[n+1]]++;
-	tmp = total - 2*v[n];
-	MP[v[n]]--;
-	if(!found && MP[tmp]) {
-		found = 1;
-		xtra = tmp;
-		swap(v[n], v[n+1]);
-	}
-	if(!found) {
-		puts("-1");
+	if(v.size() == 1) {
+		puts("NO");
 		RET;
 	}
-	found = 0;
-	F0R(i, n+1) {
-		if(!found && v[i] == xtra) {
-			found = 1;
-		} else {
-			pri(v[i]);
+	puts("YES");
+	for(int i = 0; i < v.size(); i++) {
+		if(i == mni) continue;
+		int u = v[mni].back();
+		trav(node, v[i]) {
+			printf("%d %d\n", u, node);
 		}
 	}
-	nl;
+	v[mni].pop_back();
+	while(sz(v[mni])) {
+		printf("%d %d\n", v[mxi].back(), v[mni].back());
+		v[mxi].pop_back();
+		v[mni].pop_back();
+	}
 }
-
 int main(void) {
 	/* freopen("input.txt", "r", stdin); */
 	/* freopen("output.txt", "w", stdout); */

@@ -75,68 +75,20 @@ typedef vector<bool> vb;
 #define scs2(s1, s2) scanf("%s %s", s1, s2)
 #define RET return
 
-void solve() {
-	int n;
-	sci(n);
-	ll total = 0;
-	vi v(n+2);
-	map<ll, int> MP;
-	F0R(i, n+2) {
-		sci(v[i]);
-		MP[v[i]]++;
-		total += v[i];
-	}
-	sort(all(v));
-	bool found = 0;
-	ll tmp = total - 2*v[n+1];
-	ll xtra;
-	MP[v[n+1]]--;
-	if(MP[tmp]) {
-		found = 1;
-		xtra = tmp;
-	}
-	MP[v[n+1]]++;
-	tmp = total - 2*v[n];
-	MP[v[n]]--;
-	if(!found && MP[tmp]) {
-		found = 1;
-		xtra = tmp;
-		swap(v[n], v[n+1]);
-	}
-	if(!found) {
-		puts("-1");
-		RET;
-	}
-	found = 0;
-	F0R(i, n+1) {
-		if(!found && v[i] == xtra) {
-			found = 1;
-		} else {
-			pri(v[i]);
-		}
-	}
-	nl;
-}
+
+
 
 int main(void) {
 	/* freopen("input.txt", "r", stdin); */
 	/* freopen("output.txt", "w", stdout); */
-		int t;
-		scanf("%d", &t);
-		for (int i = 1; i <= t; i++) {
-			/* printf("Case %d: ", i); */
-	
-			solve();
-			
-			/* printf("%lld\n", (ll) solve()); */
-	
-			/* if (solve()) { */
-			/* 	printf("YES\n"); */
-			/* } else { */
-			/* 		printf("NO\n"); */
-			/* } */
-		}
-	 
+	int n;
+	sci(n);
+	ll ans = 1;
+	FOR(i, 1, n+1) ans = ans * i;
+	ans /= (n/2);
+	ans /= (n/2);
+	ans /= 2;
+	prln(ans);
 	RET 0;
 }
 

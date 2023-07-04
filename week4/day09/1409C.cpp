@@ -1,7 +1,7 @@
 /* 
  * You didn’t come into this world. 
  * You came out of it, like a wave from the ocean.
- * You are not a stranger here. 
+ * You are not a stranger here.” 
 				– Alan Watts
 									 */
 #include <algorithm>
@@ -43,7 +43,6 @@ typedef vector<ld> vd;
 typedef vector<ll> vl;
 typedef vector<pii> vpii;
 typedef vector<pll> vpll;
-typedef vector<bool> vb;
 #define pb push_back
 #define mp make_pair
 #define all(x) (x).begin(), (x).end()
@@ -76,48 +75,37 @@ typedef vector<bool> vb;
 #define RET return
 
 void solve() {
-	int n;
-	sci(n);
-	ll total = 0;
-	vi v(n+2);
-	map<ll, int> MP;
-	F0R(i, n+2) {
-		sci(v[i]);
-		MP[v[i]]++;
-		total += v[i];
-	}
-	sort(all(v));
-	bool found = 0;
-	ll tmp = total - 2*v[n+1];
-	ll xtra;
-	MP[v[n+1]]--;
-	if(MP[tmp]) {
-		found = 1;
-		xtra = tmp;
-	}
-	MP[v[n+1]]++;
-	tmp = total - 2*v[n];
-	MP[v[n]]--;
-	if(!found && MP[tmp]) {
-		found = 1;
-		xtra = tmp;
-		swap(v[n], v[n+1]);
-	}
-	if(!found) {
-		puts("-1");
-		RET;
-	}
-	found = 0;
-	F0R(i, n+1) {
-		if(!found && v[i] == xtra) {
-			found = 1;
-		} else {
-			pri(v[i]);
+	int n, x, y;
+	sci3(n, x, y);
+	int a;
+	int diff = 1;
+	for(int i = 1; i <= y-x; i++) {
+		if((y-x)%i == 0 && ((y-x)/i +1 <= n)) {
+			diff = i;
+			break;
 		}
+	}
+	int cnt = 0;
+	a = x;
+	while(a <= y) {
+		printf("%d ", a);
+		a += diff;
+		cnt++;
+	}
+	a = x - diff;
+	while(cnt < n && a >= 1) {
+		pri(a);
+		a -= diff;
+		cnt++;
+	}
+	a = y + diff;
+	while(cnt < n) {
+		pri(a);
+		a += diff;
+		cnt++;
 	}
 	nl;
 }
-
 int main(void) {
 	/* freopen("input.txt", "r", stdin); */
 	/* freopen("output.txt", "w", stdout); */

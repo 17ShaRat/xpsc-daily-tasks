@@ -79,7 +79,11 @@ typedef vector<bool> vb;
 void solve() {
 	int x, y;
 	sci2(x, y);
-
+	printf("%d\n", (x-y)* 2);
+	FOR(i, y, x+1) pri(i);
+	FORd(i, x, y+1) pri(i);
+	nl;
+}
 
 int main(void) {
 	/* freopen("input.txt", "r", stdin); */

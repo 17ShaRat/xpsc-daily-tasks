@@ -83,27 +83,34 @@ void solve() {
 	sci(n);
 	F0R(i, n) sci(a[i]);
 	F0R(i, n) sci(b[i]);
-	int mx = b[0];
-	FOR(i, 1, n) {
-		if(a[i] < b[i-1]) {
-			mx = b[i];
-		}
-	}
-	set<int> S;
+	int l = 0, r = 1;
+	vi ans1(n);
+	vi ans2(n);
+	deque<pair<int, int>> dq;
+	int mn;
 	F0R(i, n) {
-		S.ins(b[i]);
-		int x = *(S.lb(a[i]));
-		printf("%d ", x-a[i]);
-	}
-	nl;
-	F0R(i, n) {
-		if(b[i] < mx) {
-			printf("%d ", mx-a[i]);
+		dq.pb({b[i], i});
+		if(dq.front().fi  >= a[i]) {
+			ans1[i] = dq.front().fi - a[i];
 		} else {
-			printf("%d ", b[i] - a[i]);
+			while(sz(dq) && dq.front().fi < a[i]){
+				dq.pop_front();
+				ans1[i] = dq.front().fi - a[i];
+			}
 		}
 	}
-	nl;
+	int mx = b[n-1];
+	ans2[n-1] = mx - a[n-1];
+	F0Rd(i, n-1) {
+		if(b[i] >= a[i+1]) {
+			ans2[i] = mx - a[i];
+		} else {
+			mx = b[i];
+			ans2[i] = mx - a[i];
+		}
+	}
+	F0R(i, n) pri(ans1[i]); nl;
+	F0R(i, n) pri(ans2[i]); nl;
 }
 int main(void) {
 	/* freopen("input.txt", "r", stdin); */

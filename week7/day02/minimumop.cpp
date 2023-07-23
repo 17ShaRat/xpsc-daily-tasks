@@ -1,0 +1,167 @@
+/* 
+ * You didn’t come into this world. 
+ * You came out of it, like a wave from the ocean.
+ * You are not a stranger here. 
+				– Alan Watts
+ */
+#include <algorithm>
+#include <array>
+#include <bitset>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cstdint>
+#include <complex>
+#include <cmath>
+#include <chrono>
+#include <ctime>
+#include <cassert>
+#include <list>
+#include <vector>
+#include <set>
+#include <map>
+#include <stack>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <string>
+#include <random>
+#pragma GCC target("popcnt")
+using namespace std;
+using ll = long long;
+using ld = long double;
+using uint = unsigned int;
+using ull = unsigned long long;
+template<typename T>
+using pair2 = pair<T, T>;
+using pii = pair<int, int>;
+using pli = pair<ll, int>;
+using pil = pair<int, ll>;
+using pll = pair<ll, ll>;
+
+typedef vector<int> vi;
+typedef vector<ld> vd;
+typedef vector<ll> vl;
+typedef vector<pii> vpii;
+typedef vector<pll> vpll;
+typedef vector<bool> vb;
+#define pb push_back
+#define mp make_pair
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define fi first
+#define se second
+#define lb lower_bound
+#define ub upper_bound
+#define sz(x) (int)(x).size()
+#define FOR(i, a, b) for (int i=a; i<(b); i++)
+#define F0R(i, a) for (int i=0; i<(a); i++)
+#define FORd(i,a,b) for (int i = (a)-1; i >= b; i--)
+#define F0Rd(i,a) for (int i = (a)-1; i >= 0; i--)
+#define trav(a,x) for (auto& a : x)
+#define nl putchar('\n')
+#define putc(c) putchar(c)
+#define ins insert
+#define sci(x) scanf("%d", &x)
+#define sci2(a,b) scanf("%d %d", &a, &b)
+#define sci3(a,b,c) scanf("%d %d %d", &a, &b, &c)
+#define sci4(a,b,c,d) scanf("%d %d %d %d", &a, &b, &c, &d)
+#define pri(x) printf("%d ", x)
+#define prin(x) printf("%d\n", x)
+#define scl(x) scanf("%lld", &x)
+#define scl2(a,b) scanf("%lld %lld", &a, &b)
+#define scl3(a,b,c) scanf("%lld %lld %lld", &a, &b, &c)
+#define prl(x) printf("%lld ", x)
+#define prln(x) printf("%lld\n", x)
+#define scs(s) scanf("%s", s)
+#define scs2(s1, s2) scanf("%s %s", s1, s2)
+#define RET return
+const int M = 1e6 + 50;
+vi primes;
+void prime_gen() {
+	vb num(M,1);
+	num[0] = num[1] = 0;
+	FOR(i, 2, M) {
+		if(num[i]) {
+			primes.pb(i);
+			for(ll j = 2; j * i < M; j++) {
+				num[i*j] = 0;
+			}
+		}
+	}
+}
+void solve() {
+	int n, m;
+	sci2(n, m);
+	vi v(n);
+	set<int>found;
+	F0R(i, n) {
+		sci(v[i]);
+		if(v[i] == 0) found.ins(0);
+	}
+	bool same = 1;
+	FOR(i,1, n) {
+		if(v[i] != v[i-1]) {
+			same = 0;
+			break;
+		}
+	}
+	if(same) {
+		puts("0");
+		RET;
+	}
+	F0R(i, n) {
+		if(binary_search(all(primes), v[i])) {
+				found.ins(v[i]);
+				continue;
+			}
+		trav(prime, primes) {
+			if(v[i] > 1 && v[i] % prime == 0) found.ins(prime);
+			while(v[i] > 1 && v[i] % prime == 0) {
+				v[i] = v[i] / prime;
+			}
+			if(v[i] <= 1) break;
+		}
+	}
+	int i;
+	n = sz(primes);
+	for(i = 0;i < n && primes[i] <= m; i++) {
+		if(!found.count(primes[i]) && !found.count(0)) {
+			printf("1\n%d\n", primes[i]);
+			RET;
+		}
+	}
+	i--;
+	/* printf("size of found = %d\n", sz(found)); */
+	if(sz(found) > 1) {
+		printf("2\n");
+		printf("%d\n", primes[i]);
+		printf("%d\n", primes[i-1]);
+	} else {
+		/* printf("HELLO"); */
+		printf("1\n%d\n", primes[i]);
+	}
+}
+
+int main(void) {
+	/* freopen("input.txt", "r", stdin); */
+	/* freopen("output.txt", "w", stdout); */
+		int t;
+		scanf("%d", &t);
+		prime_gen();
+		for (int i = 1; i <= t; i++) {
+			/* printf("Case %d: ", i); */
+	
+			solve();
+			
+			/* printf("%lld\n", (ll) solve()); */
+	
+			/* if (solve()) { */
+			/* 	printf("YES\n"); */
+			/* } else { */
+			/* 		printf("NO\n"); */
+			/* } */
+		} 
+	RET 0;
+}
+
